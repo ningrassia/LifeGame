@@ -109,6 +109,10 @@ std::string LifeGame::display(){
 	return os.str();
 }
 
+std::vector<bool> current_buffer() {
+	return curr_board ? board_b : board_a;
+}
+
 void LifeGame::randomize() {
 	std::uniform_int_distribution<int> num_rolls_distribution(0, (size * size) - 1);
 	std::uniform_int_distribution<int> coordinate_distribution(0, size - 1);

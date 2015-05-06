@@ -10,13 +10,16 @@ public:
 	LifeGame(int size);
 	~LifeGame();
 
-	void update();
-	bool set(int x, int y);
-	bool clear(int x, int y);
-	std::string display();
 	void randomize();
 	bool load_file(std::string filename);
 
+	void update();
+	bool set(int x, int y);
+	bool clear(int x, int y);
+	
+	std::string display();
+	std::vector<bool> current_buffer();
+	
 private:
 
 
