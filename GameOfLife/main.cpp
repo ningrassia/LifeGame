@@ -47,13 +47,14 @@ int main(int argc, char* *argv) {
 	}
 #endif
 	//run game
-	std::cout << "Press any key to step simulation." << std::endl << std::endl;
-	getchar();
 	std::cout << "Initial State" << std::endl << game.display() << std::endl;
+	std::cout << "Press any key to step simulation. x to skip drawing." << std::endl << std::endl;
+	getchar();
 	for (int i = 0; i < NUM_STEPS; i++) {
-		getchar();
+		char in = getchar();
 		game.update();
-		std::cout << "Step: " << (i) << std::endl << game.display() << std::endl;
+		if(in != 'x')
+			std::cout << "Step: " << (i) << std::endl << game.display() << std::endl;
 	}
 	std::cout << "Simulation complete." << std::endl;
 	getchar();
