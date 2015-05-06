@@ -55,43 +55,11 @@ Any dead cell with exactly three live neighbours becomes a live cell, as if by r
 */
 void LifeGame::update(){
 	int i;
-	if (curr_board) {
-		for (i = 0; i < (size*size); i++) {
-			int neighbors = get_neighbors(i%size, i / size);
-			if (board_b[i]) {
-				if (neighbors < 2)
-					board_a[i] = false;
-				else if (neighbors > 3)
-					board_a[i] = false;
-				else
-					board_a[i] = true;
-			}
-			else {
-				if (neighbors == 3)
-					board_a[i] = true;
-				else
-					board_a[i] = false;
-			}
-		}
-	}
-	else {
-		for (i = 0; i < (size*size); i++) {
-			int neighbors = get_neighbors(i%size, i / size);
-			if (board_a[i]) {
-				if (neighbors < 2)
-					board_b[i] = false;
-				else if (neighbors > 3)
-					board_b[i] = false;
-				else
-					board_b[i] = true;
-			}
-			else {
-				if (neighbors == 3)
-					board_b[i] = true;
-				else
-					board_b[i] = false;
-			}
-		}
+	for (i = 0; i < (size*size); i++) {
+		if (curr_board)
+			update_cell(i, board_b, board_a);
+		else
+			update_cell(i, board_a, board_b);
 	}
 	curr_board = !curr_board; //swap the buffer!
 }
@@ -193,4 +161,22 @@ int LifeGame::get_neighbors(int x, int y){
 		}
 	}
 	return num_neighbors;
+}
+
+void LifeGame::update_cell(int cell, std::vector<bool> &from, std::vector<bool> &to) {
+	int neighbors = get_neighbors(cell%size, cell / size);
+	if (from[cell]) {
+		if (neighbors < 2)
+			to[cell] = false;
+		else if (neighbors > 3)
+			to[cell] = false;
+		else
+			to[cell] = true;
+	}
+	else {
+		if (neighbors == 3)
+			to[cell] = true;
+		else
+			to[cell] = false;
+	}
 }

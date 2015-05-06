@@ -22,7 +22,7 @@ private:
 
 
 	int get_neighbors(int x, int y);
-
+	void update_cell(int cell, std::vector<bool> &from, std::vector<bool> &to);
 	int size;
 	bool curr_board; //false means board_a was last update, true means board_b was last updated.
 
