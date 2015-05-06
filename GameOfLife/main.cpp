@@ -41,14 +41,14 @@ int main(int argc, char* *argv) {
 	}
 	else if (argc == 3) {
 		if(!game.load_file(argv[2])){
-			std::cout << "Error loading file " << argv[2] << std::endl;
+			std::cout << "Error loading file " << argv[2]  << "." << std::endl;
 			return 1;
 		}
 	}
 #endif
 	//run game
 	std::cout << "Initial State" << std::endl << game.display() << std::endl;
-	std::cout << "Press any key to step simulation. x to skip drawing." << std::endl << std::endl;
+	std::cout << "Press enter to step simulation. repeated x characters will skip drawing steps." << std::endl << std::endl;
 	getchar();
 	for (int i = 0; i < NUM_STEPS; i++) {
 		char in = getchar();
