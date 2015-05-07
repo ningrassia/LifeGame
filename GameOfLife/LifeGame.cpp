@@ -109,7 +109,7 @@ std::string LifeGame::display(){
 	return os.str();
 }
 
-std::vector<bool> current_buffer() {
+std::vector<bool> LifeGame::current_buffer() {
 	return curr_board ? board_b : board_a;
 }
 
@@ -170,9 +170,7 @@ int LifeGame::get_neighbors(int x, int y){
 void LifeGame::update_cell(int cell, std::vector<bool> &from, std::vector<bool> &to) {
 	int neighbors = get_neighbors(cell%size, cell / size);
 	if (from[cell]) {
-		if (neighbors < 2)
-			to[cell] = false;
-		else if (neighbors > 3)
+		if ((neighbors < 2) || (neighbors > 3))
 			to[cell] = false;
 		else
 			to[cell] = true;
