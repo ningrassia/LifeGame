@@ -1,9 +1,34 @@
 #include <iostream>
+#include <vector>
+
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "LifeGame.h"
 
-#define NUM_STEPS 200
-#define DEBUG_SIZE 30
+#define NUM_STEPS	200
+#define DEBUG_SIZE	30
+#define GRAPHICS	1
+
+//this should be in a different file?
+void drawToSFML(sf::RenderWindow &window, std::vector<bool> grid, int size) {
+	//clear display
+	window.clear(sf::Color::White);
+
+	sf::RectangleShape block(sf::Vector2f(window.getSize().x / size, window.getSize().y / size));
+	for (int i = 0; i < size*size; i++)	{
+		if (grid[i])
+			block.setFillColor(sf::Color::Green);
+		else
+			block.setFillColor(sf::Color::Black);
+		block.setPosition(sf::Vector2f((i%size) * window.getSize().x / size, (i/size) * window.getSize().y / size));
+
+		window.draw(block);
+
+	}
+
+	window.display();
+}
 
 int main(int argc, char* *argv) {
 
@@ -43,7 +68,41 @@ int main(int argc, char* *argv) {
 		num_steps = atoi(argv[3]);
 	else
 		num_steps = NUM_STEPS;
+#ifdef GRAPHICS
+	int curr_step = 0;
+	sf::RenderWindow window;
+	window.create(sf::VideoMode(1000,1000), "Game of Life", sf::Style::Close);
+	//window.setSize(sf::Vector2u(4 * size, 3 * size));
 
+	//draw initial state
+	drawToSFML(window, game.current_buffer(), size);
+
+	while(window.isOpen()) {
+		sf::Event event;
+		while(window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				window.close();
+			}
+			else if (event.type == sf::Event::KeyPressed) {
+				if (curr_step++ == num_steps)
+					window.close();
+
+				//also do text because reasons
+				//std::cout << std::endl << game.display() << std::endl;
+
+				game.update();
+				drawToSFML(window, game.current_buffer(), size);
+
+				std::string title = "Game of Life - Step ";
+				title.append(std::to_string(curr_step));
+				window.setTitle(title);
+
+			}
+			else
+				drawToSFML(window, game.current_buffer(), size);
+		}
+	}
+#else
 	//run game
 	std::cout << "Initial State" << std::endl << game.display() << std::endl;
 	std::cout << "Press enter to step simulation. repeated x characters will skip drawing steps." << std::endl << std::endl;
@@ -51,10 +110,12 @@ int main(int argc, char* *argv) {
 	for (int i = 0; i < num_steps; i++) {
 		char in = getchar();
 		game.update();
+		
 		if(in != 'x')
 			std::cout << "Step: " << (i+1) << std::endl << game.display() << std::endl;
 	}
 	std::cout << "Simulation complete." << std::endl;
 	getchar();
+#endif
 	return 0;
 }
