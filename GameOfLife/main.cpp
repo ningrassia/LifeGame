@@ -13,18 +13,15 @@
 //this should be in a different file?
 void drawToSFML(sf::RenderWindow &window, std::vector<bool> grid, int size) {
 	//clear display
-	window.clear(sf::Color::White);
+	window.clear(sf::Color::Black);
 
-	sf::RectangleShape block(sf::Vector2f(window.getSize().x / size, window.getSize().y / size));
+	sf::RectangleShape block(sf::Vector2f(window.getSize().x / float(size), window.getSize().y / float(size)));
 	for (int i = 0; i < size*size; i++)	{
-		if (grid[i])
+		if (grid[i]) {
 			block.setFillColor(sf::Color::Green);
-		else
-			block.setFillColor(sf::Color::Black);
-		block.setPosition(sf::Vector2f((i%size) * window.getSize().x / size, (i/size) * window.getSize().y / size));
-
-		window.draw(block);
-
+			block.setPosition(sf::Vector2f(float(i%size) * window.getSize().x / float(size), float(i / size) * window.getSize().y / float(size)));
+			window.draw(block);
+		}
 	}
 
 	window.display();
@@ -44,6 +41,13 @@ int main(int argc, char* *argv) {
 	}
 	else  {
 		size = atoi(argv[1]);
+
+		if (size > 1000) {
+			std::cout << "Too large - graphics mode fails. Quitting." << std::endl;
+			return 1;
+		}
+		else if (size > 250)
+			std::cout << "Warning - this will likely be slow." << std::endl;
 	}
 #endif
 
